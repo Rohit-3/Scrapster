@@ -1,0 +1,690 @@
+<!-- templates/index.html - Advanced UI v2.0 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scrapster - Universal Web Scraper v3.0</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 2em;
+      text-align: center;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 0.9em;
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+      font-size: 0.95em;
+    }
+    
+    .label-hint {
+      font-weight: normal;
+      color: #999;
+      font-size: 0.85em;
+      margin-left: 5px;
+    }
+    
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+      font-family: inherit;
+    }
+    
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+      font-family: 'Courier New', monospace;
+    }
+    
+    .operator-group {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .operator-item {
+      flex: 1;
+    }
+    
+    .operator-item label {
+      font-size: 0.85em;
+    }
+    
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    input[type="checkbox"] {
+      width: auto;
+      transform: scale(1.2);
+      cursor: pointer;
+    }
+    
+    .export-format {
+      display: flex;
+      gap: 15px;
+      margin-top: 10px;
+    }
+    
+    .export-format label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: normal;
+      cursor: pointer;
+      padding: 10px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+    
+    .export-format input[type="radio"] {
+      width: auto;
+    }
+    
+    .export-format input[type="radio"]:checked + label {
+      border-color: #667eea;
+      background: #f0f4ff;
+    }
+    
+    .query-preview {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border-left: 4px solid #667eea;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+      word-break: break-all;
+    }
+    
+    .query-preview strong {
+      color: #667eea;
+    }
+    
+    button {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 10px;
+    }
+    
+    button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    
+    .progress-container {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 30px;
+      background: #e0e0e0;
+      border-radius: 15px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      width: 0%;
+      transition: width 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.85em;
+      font-weight: bold;
+    }
+    
+    .progress-text {
+      text-align: center;
+      color: #666;
+      font-size: 0.9em;
+    }
+    
+    .error-message {
+      display: none;
+      background: #fee;
+      color: #c33;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      border-left: 4px solid #c33;
+    }
+    
+    .success-message {
+      display: none;
+      background: #efe;
+      color: #3c3;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      border-left: 4px solid #3c3;
+    }
+    
+    .stats {
+      display: flex;
+      gap: 20px;
+      margin-top: 15px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+    
+    .stat-item {
+      flex: 1;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #667eea;
+    }
+    
+    .stat-label {
+      font-size: 0.85em;
+      color: #666;
+      margin-top: 5px;
+    }
+    
+    .feature-badge {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.75em;
+      margin-left: 10px;
+      font-weight: normal;
+    }
+    
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      
+      .operator-group {
+        flex-direction: column;
+      }
+      
+      .export-format {
+        flex-direction: column;
+      }
+      
+      .stats {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚀 Scrapster <span class="feature-badge">v3.0</span></h1>
+    <p class="subtitle">Universal Web Scraper - Scrape Anything, Anywhere, Anytime</p>
+    
+    <form id="scrapeForm" action="/scrape" method="post" enctype="multipart/form-data">
+      <div class="form-group" style="background: #e8f5e9; padding: 15px; border-radius: 8px; border: 2px solid #4caf50;">
+        <div class="checkbox-group">
+          <input type="checkbox" name="use_direct_scraper" id="use_direct_scraper" checked />
+          <label for="use_direct_scraper" style="font-weight: bold; color: #2e7d32;">🚀 Direct Scraper Mode (No API Keys Needed!)</label>
+        </div>
+        <p style="font-size: 0.9em; color: #2e7d32; margin-top: 8px; font-weight: bold;">
+          ✅ Pure code-based scraping - Works like Apple/Google products! Searches LinkedIn, GitHub, and Google directly using browser automation.
+        </p>
+        <p style="font-size: 0.85em; color: #666; margin-top: 5px;">
+          No API keys, no limits, just powerful code. Slower but more thorough and completely free!
+        </p>
+      </div>
+      
+      <div id="apiCredentialsSection" style="display: none;">
+        <div class="form-group">
+          <div class="checkbox-group">
+            <input type="checkbox" name="use_saved_creds" id="use_saved_creds" />
+            <label for="use_saved_creds">💾 Use Saved Credentials from config.env</label>
+          </div>
+          <p style="font-size: 0.85em; color: #666; margin-top: 5px;">
+            Check this if you've set up GOOGLE_API_KEY and GOOGLE_CSE_ID in config.env file
+          </p>
+        </div>
+        
+        <div id="credentialsForm">
+          <div class="form-group">
+            <label>🔑 Google API Key <span class="label-hint">(Required if not using saved credentials)</span></label>
+            <input type="text" name="api_key" id="api_key" placeholder="AIzaSy..." />
+          </div>
+          
+          <div class="form-group">
+            <label>🆔 Custom Search Engine ID (CSE ID) <span class="label-hint">(Required if not using saved credentials)</span></label>
+            <input type="text" name="cx" id="cx" placeholder="012345678901234567890:abcdefghijk" />
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>🔎 Search Terms <span class="label-hint">(One per line, e.g. "software engineer", "product manager", "data scientist")</span></label>
+        <textarea name="keywords" placeholder='software engineer
+product manager
+data scientist
+python developer
+marketing specialist' required></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>🎯 Scraping Type:</label>
+        <div class="export-format">
+          <input type="radio" name="scrape_type" value="profiles" id="scrape_profiles" checked />
+          <label for="scrape_profiles">Profiles (People)</label>
+          
+          <input type="radio" name="scrape_type" value="companies" id="scrape_companies" />
+          <label for="scrape_companies">Companies</label>
+          
+          <input type="radio" name="scrape_type" value="products" id="scrape_products" />
+          <label for="scrape_products">Products</label>
+          
+          <input type="radio" name="scrape_type" value="general" id="scrape_general" />
+          <label for="scrape_general">General Web Content</label>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>🌐 Source Selection:</label>
+        <div class="export-format">
+          <input type="radio" name="source_mode" value="all" id="source_all" checked />
+          <label for="source_all">All Internet (LinkedIn, GitHub, Google, etc.)</label>
+          
+          <input type="radio" name="source_mode" value="linkedin" id="source_linkedin" />
+          <label for="source_linkedin">LinkedIn Only</label>
+          
+          <input type="radio" name="source_mode" value="github" id="source_github" />
+          <label for="source_github">GitHub Only</label>
+          
+          <input type="radio" name="source_mode" value="google" id="source_google" />
+          <label for="source_google">Google Search Only</label>
+        </div>
+        <p style="font-size: 0.85em; color: #666; margin-top: 5px;">
+          Choose where to search. "All Internet" searches multiple sources for maximum coverage.
+        </p>
+      </div>
+      
+      <div class="operator-group">
+        <div class="operator-item">
+          <label>Keyword Operator:</label>
+          <select name="keyword_operator">
+            <option value="OR" selected>OR (Any keyword)</option>
+            <option value="AND">AND (All keywords)</option>
+          </select>
+        </div>
+        <div class="operator-item">
+          <label>Location Operator:</label>
+          <select name="location_operator">
+            <option value="OR" selected>OR (Any location)</option>
+            <option value="AND">AND (All locations)</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>📍 Locations <span class="label-hint">(One per line, optional)</span></label>
+        <textarea name="locations" placeholder='San Francisco
+India
+Remote
+New York'></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>📊 Number of Results <span class="label-hint">(Max 1000 with Direct Scraper, 100 with API)</span></label>
+        <input type="number" name="limit" min="1" max="1000" value="50" required />
+        <p style="font-size: 0.85em; color: #666; margin-top: 5px;">
+          Direct Scraper mode supports unlimited results (up to 1000). API mode is limited to 100 per key.
+        </p>
+      </div>
+      
+      <div class="form-group">
+        <label>📤 Export Format:</label>
+        <div class="export-format">
+          <input type="radio" name="export_format" value="csv" id="csv" checked />
+          <label for="csv">CSV</label>
+          
+          <input type="radio" name="export_format" value="json" id="json" />
+          <label for="json">JSON</label>
+          
+          <input type="radio" name="export_format" value="excel" id="excel" />
+          <label for="excel">Excel</label>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <div class="checkbox-group">
+          <input type="checkbox" name="extract_emails" id="extract_emails" checked />
+          <label for="extract_emails">📧 Extract Original Email Addresses (REQUIRED - Only profiles with personal emails)</label>
+        </div>
+        <p style="font-size: 0.85em; color: #d32f2f; margin-top: 5px; font-weight: bold;">
+          ⚠️ When enabled, ONLY profiles with ORIGINAL personal email addresses will be included. Generic emails (info@, contact@, etc.) are filtered out. Emails must match the person's name.
+        </p>
+      </div>
+      
+      <div class="form-group">
+        <div class="checkbox-group">
+          <input type="checkbox" name="enable_advanced_scraping" id="enable_advanced_scraping" />
+          <label for="enable_advanced_scraping">🚀 Enable Advanced Browser Automation (Deep Email Extraction)</label>
+        </div>
+        <p style="font-size: 0.85em; color: #666; margin-top: 5px;">
+          <strong>Powerful Mode:</strong> Uses Playwright browser automation to extract emails from profile pages, shadow DOM, API intercepts, and contact modals. Requires: <code>pip install playwright && playwright install chromium</code>
+        </p>
+        <p style="font-size: 0.75em; color: #d32f2f; margin-top: 5px; font-style: italic;">
+          ⚠️ For authorized reconnaissance only. Slower but more thorough - finds emails not visible in search snippets.
+        </p>
+      </div>
+      
+      <div class="form-group">
+        <div class="checkbox-group">
+          <input type="checkbox" name="enable_key_rotation" id="enable_key_rotation" />
+          <label for="enable_key_rotation">🔄 Enable API Key Rotation (for unlimited scraping)</label>
+        </div>
+        <p style="font-size: 0.85em; color: #666; margin-top: 5px;">
+          Automatically rotates through multiple API keys when quota is reached. Requires MULTIPLE_API_KEYS in config.env
+        </p>
+      </div>
+      
+      <div class="query-preview" id="queryPreview">
+        <strong>Query Preview:</strong> <span id="previewText">Enter keywords and locations to see preview</span>
+      </div>
+      
+      <button type="submit" id="submitBtn">🚀 Start Scraping & Download</button>
+      
+      <div class="progress-container" id="progressContainer">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill">0%</div>
+        </div>
+        <div class="progress-text" id="progressText">Initializing...</div>
+      </div>
+      
+      <div class="error-message" id="errorMessage"></div>
+      <div class="success-message" id="successMessage"></div>
+    </form>
+  </div>
+  
+  <script>
+    const form = document.getElementById('scrapeForm');
+    const previewText = document.getElementById('previewText');
+    const submitBtn = document.getElementById('submitBtn');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+    
+    // Update query preview
+    function updatePreview() {
+      const keywords = document.querySelector('textarea[name="keywords"]').value.trim();
+      const locations = document.querySelector('textarea[name="locations"]').value.trim();
+      const keywordOp = document.querySelector('select[name="keyword_operator"]').value;
+      const locationOp = document.querySelector('select[name="location_operator"]').value;
+      
+      if (!keywords) {
+        previewText.textContent = 'Enter keywords and locations to see preview';
+        return;
+      }
+      
+      const formData = new FormData();
+      formData.append('keywords', keywords);
+      formData.append('locations', locations);
+      formData.append('keyword_operator', keywordOp);
+      formData.append('location_operator', locationOp);
+      
+      fetch('/preview', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.query) {
+          previewText.textContent = data.query;
+        } else {
+          previewText.textContent = 'Invalid query';
+        }
+      })
+      .catch(err => {
+        previewText.textContent = 'Error generating preview';
+      });
+    }
+    
+    // Add event listeners for preview updates
+    document.querySelector('textarea[name="keywords"]').addEventListener('input', updatePreview);
+    document.querySelector('textarea[name="locations"]').addEventListener('input', updatePreview);
+    document.querySelector('select[name="keyword_operator"]').addEventListener('change', updatePreview);
+    document.querySelector('select[name="location_operator"]').addEventListener('change', updatePreview);
+    
+    // Initial preview
+    updatePreview();
+    
+    // Toggle direct scraper mode
+    const directScraperCheckbox = document.getElementById('use_direct_scraper');
+    const apiCredentialsSection = document.getElementById('apiCredentialsSection');
+    const apiKeyInput = document.getElementById('api_key');
+    const cxInput = document.getElementById('cx');
+    const useSavedCredsCheckbox = document.getElementById('use_saved_creds');
+    const credentialsForm = document.getElementById('credentialsForm');
+    
+    function updateFieldRequirements() {
+      // Always remove required first to avoid validation issues
+      apiKeyInput.removeAttribute('required');
+      cxInput.removeAttribute('required');
+      
+      // Only add required if:
+      // 1. Direct scraper is NOT checked (API mode)
+      // 2. API credentials section is visible
+      // 3. Saved credentials is NOT checked (form fields are visible)
+      if (!directScraperCheckbox.checked && 
+          apiCredentialsSection.style.display !== 'none' && 
+          !useSavedCredsCheckbox.checked && 
+          credentialsForm.style.display !== 'none') {
+        apiKeyInput.setAttribute('required', 'required');
+        cxInput.setAttribute('required', 'required');
+      }
+    }
+    
+    function toggleScraperMode() {
+      if (directScraperCheckbox.checked) {
+        // Direct scraper mode - hide API credentials
+        apiCredentialsSection.style.display = 'none';
+        // Remove required attributes
+        updateFieldRequirements();
+      } else {
+        // API mode - show credentials
+        apiCredentialsSection.style.display = 'block';
+        // Update requirements based on saved creds state
+        updateFieldRequirements();
+        toggleCredentialsForm(); // Also handle saved creds toggle
+      }
+    }
+    
+    directScraperCheckbox.addEventListener('change', toggleScraperMode);
+    
+    // Toggle credentials form based on saved credentials checkbox
+    function toggleCredentialsForm() {
+      if (useSavedCredsCheckbox.checked) {
+        credentialsForm.style.display = 'none';
+        // Remove required when hidden
+        updateFieldRequirements();
+      } else {
+        credentialsForm.style.display = 'block';
+        // Add required when visible (only if API mode)
+        updateFieldRequirements();
+      }
+    }
+    
+    useSavedCredsCheckbox.addEventListener('change', toggleCredentialsForm);
+    
+    // Initial state
+    toggleScraperMode();
+    toggleCredentialsForm();
+    
+    // Also update requirements before form submission
+    const form = document.getElementById('scrapeForm');
+    form.addEventListener('submit', function(e) {
+      // Update requirements one more time before submission
+      updateFieldRequirements();
+    });
+    
+    // Form submission with progress
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      // Hide previous messages
+      errorMessage.style.display = 'none';
+      successMessage.style.display = 'none';
+      
+      // Show progress
+      submitBtn.disabled = true;
+      progressContainer.style.display = 'block';
+      progressFill.style.width = '10%';
+      progressFill.textContent = '10%';
+      progressText.textContent = 'Preparing request...';
+      
+      const formData = new FormData(form);
+      
+      try {
+        // Simulate progress
+        let progress = 10;
+        const progressInterval = setInterval(() => {
+          if (progress < 90) {
+            progress += 10;
+            progressFill.style.width = progress + '%';
+            progressFill.textContent = progress + '%';
+            progressText.textContent = `Scraping profiles... ${progress}%`;
+          }
+        }, 500);
+        
+        const response = await fetch('/scrape', {
+          method: 'POST',
+          body: formData
+        });
+        
+        clearInterval(progressInterval);
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Request failed');
+        }
+        
+        // Get filename from response
+        const contentDisposition = response.headers.get('Content-Disposition');
+        let filename = 'profiles.csv';
+        if (contentDisposition) {
+          const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+          if (filenameMatch) {
+            filename = filenameMatch[1].replace(/['"]/g, '');
+          }
+        }
+        
+        // Download file
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        // Show success
+        progressFill.style.width = '100%';
+        progressFill.textContent = '100%';
+        progressText.textContent = 'Complete! Download started.';
+        successMessage.textContent = `✅ Successfully scraped and downloaded ${filename}`;
+        successMessage.style.display = 'block';
+        
+        setTimeout(() => {
+          progressContainer.style.display = 'none';
+          submitBtn.disabled = false;
+        }, 2000);
+        
+      } catch (error) {
+        progressContainer.style.display = 'none';
+        errorMessage.textContent = `❌ Error: ${error.message}`;
+        errorMessage.style.display = 'block';
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
